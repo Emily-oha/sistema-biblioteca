@@ -1,0 +1,49 @@
+
+[project]
+name = "sistema-biblioteca"
+version = "0.1.0"
+description = "Sistema de aluguel de livros para uma biblioteca"
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "fastapi[standard]",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "typos",
+    "httpx",
+    "taskipy",
+]
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+preview = true
+select = ["I", "F", "E", "W", "PL", "PT"]
+
+[tool.ruff.format]
+preview = true
+quote-style = "single"
+
+[tool.pytest]
+pythonpath = ["."]
+addopts = ["-p", "no:warnings", "--cov=app", "--cov-context=test"]
+testpaths = ["teste"]
+
+[tool.taskipy.tasks]
+test = "pytest -s -x -vv"
+lint = "ruff check"
+format = "ruff format"
+
+[tool.typos.files]
+extend-exclude = ["*.md"]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
