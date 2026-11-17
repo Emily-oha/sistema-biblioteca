@@ -16,7 +16,7 @@ dev = [
     "ruff",
     "typos",
     "httpx",
-    "taskipy",
+    "poethepoet",
 ]
 
 [tool.ruff]
@@ -36,10 +36,25 @@ pythonpath = ["."]
 addopts = ["-p", "no:warnings", "--cov=app", "--cov-context=test"]
 testpaths = ["teste"]
 
-[tool.taskipy.tasks]
-test = "pytest -s -x -vv"
-lint = "ruff check"
-format = "ruff format"
+[tool.poe.tasks]
+
+lint.sequence = [
+    { cmd = "typos" },
+    { cmd = "ruff check" },
+]
+
+format.sequence = [
+    { cmd = "ruff check --fix" },
+    { cmd = "ruff format" },
+]
+
+serve = "fastapi dev app.py"
+
+test.sequence = [
+    "lint",
+    { cmd = "pytest -s -x -vv $POE_EXTRA_ARGS" },
+    { cmd = "coverage html --show-contexts" },
+]
 
 [tool.typos.files]
 extend-exclude = ["*.md"]
